@@ -7,5 +7,8 @@ export default function Main() {
             <Header cartCount={ cartCount } />
             <p data-testid='home-initial-message' > Digite algum termo de pesquisa ou escolha uma categoria.</p>
         </div>
+        <ul>
+            <span>Nenhum produto foi encontrado</span>
+        </ul>
     );
 };
