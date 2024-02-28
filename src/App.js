@@ -12,7 +12,7 @@ function App() {
         <Route
           exact
           path="/product/:id"
-          element={(props) => <ProductPage {...props} />}
+          Component={(props) => <ProductPage {...props} />}
         />
       </Routes>
     </BrowserRouter>
