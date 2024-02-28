@@ -1,107 +1,127 @@
+import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import React, { Component } from 'react';
 import FreeShipping from '../components/FreeShipping';
 import Header from '../components/Header';
 import Rating from '../components/Rating';
 import { getProductsFromId } from '../services/api';
 
-class ProductPage extends Component {
-    constructor() {
-        super();
-        this.state = {
+function ProductPage() {
+    const { id } = useParams();
+    const [state, setState] = useState({
         email: '',
         evaluation: '',
         rating: '',
         productResume: [],
         arraylenght: true,
         cartCount: '',
-        };
-    }
+        thumbnail: '',
+        price: '',
+        title: '',
+        result: '',
+        freeShipping: false,
+    });
 
-    async componentDidMount() {
-        const { match } = this.props;
-    
-        if (match && match.params && match.params.id) {
-            const { params: { id: productId } } = match;
-    
-            // Chame a função getProductsFromId somente após obter o productId
-            const result = await getProductsFromId(productId);
-    
-            if (!localStorage.getItem(productId)) {
-                localStorage.setItem(productId, '[]');
-                this.setState({
-                    arraylenght: false,
-                });
-            }
-    
+    useEffect(() => {
+        const fetchData = async () => {
+        try {
+            const result = await getProductsFromId(id);
             const { thumbnail, price, title, shipping } = result;
             const { free_shipping: freeShipping } = shipping;
-            this.setState({ thumbnail, price, title, result, freeShipping });
-    
-            const aval = localStorage.getItem(productId);
-            const aval1 = JSON.parse(aval);
-            this.setState({
-                productResume: aval1,
-            });
-    
-            this.handleCart();
-        } else {
-            console.error('ID do produto não encontrado nos parâmetros da URL.');
-        }
-    }
 
-    handleCLick = ({ target }) => {
+            setState((prevState) => ({
+            ...prevState,
+            thumbnail,
+            price,
+            title,
+            result,
+            freeShipping,
+            }));
+
+            if (!localStorage.getItem(id)) {
+            localStorage.setItem(id, '[]');
+            setState((prevState) => ({
+                ...prevState,
+                arraylenght: false,
+            }));
+            }
+
+            const aval = localStorage.getItem(id);
+            const aval1 = JSON.parse(aval);
+            setState((prevState) => ({
+            ...prevState,
+            productResume: aval1,
+            }));
+
+            handleCart();
+        } catch (error) {
+            console.error('Erro ao buscar dados do produto:', error);
+        }
+        };
+
+        fetchData();
+    }, [id]);
+
+    const handleCLick = ({ target }) => {
         let { value } = target;
         let cart = localStorage.getItem('cartProducts');
         cart = JSON.parse(cart);
         value = JSON.parse(value);
+
         if (!cart) {
         localStorage.setItem('cartProducts', JSON.stringify([value]));
         } else {
         cart.push(value);
         localStorage.setItem('cartProducts', JSON.stringify(cart));
         }
-        this.handleCart();
-    }
 
-    handleAvaliation = () => {
-        const { match: { params: { id: productId } } } = this.props;
-        const { email, evaluation, rating } = this.state;
+        handleCart();
+    };
+
+    const handleAvaliation = () => {
+        const { email, evaluation, rating } = state;
         const productEvaluation = { email, evaluation, rating };
-        const aval = localStorage.getItem(productId);
+
+        const aval = localStorage.getItem(id);
         const aval1 = JSON.parse(aval);
-        this.setState({
+
+        setState((prevState) => ({
+        ...prevState,
         productResume: aval1,
         email: '',
         evaluation: '',
         rating: '',
         arraylenght: true,
-        }, () => {
-        this.setState((prevState) => ({
-            productResume: [...prevState.productResume, productEvaluation],
-        }), () => {
-            const { productResume } = this.state;
-            localStorage.setItem(productId, JSON.stringify(productResume));
-        });
-        });
-    }
+        }));
 
-    onChange = ({ target }) => {
+        setState((prevState) => ({
+        ...prevState,
+        productResume: [...prevState.productResume, productEvaluation],
+        }));
+
+        const { productResume } = state;
+        localStorage.setItem(id, JSON.stringify(productResume));
+    };
+
+    const onChange = ({ target }) => {
         const { value, name } = target;
-        this.setState({
+        setState((prevState) => ({
+        ...prevState,
         [name]: value,
-        });
-    }
+        }));
+    };
 
-    handleCart = () => {
+    const handleCart = () => {
         const cartItems = localStorage.getItem('cartProducts');
         const cartCount = JSON.parse(cartItems).length;
-        this.setState({ cartCount });
+        setState((prevState) => ({
+        ...prevState,
+        cartCount,
+        }));
         localStorage.setItem('quant', cartCount);
-    }
+    };
 
-    render() {
-        const {
+    const {
         thumbnail,
         price,
         title,
@@ -111,86 +131,79 @@ class ProductPage extends Component {
         productResume,
         arraylenght,
         cartCount,
-        freeShipping } = this.state;
-        return (
+        freeShipping,
+    } = state;
+
+    return (
         <>
-            <Header cartCount={ cartCount } />
-            <main className="productPageMain">
+        <Header cartCount={cartCount} />
+        <main className="productPageMain">
             <aside>
-                <img src={ thumbnail } alt={ title } />
+            <img src={thumbnail} alt={title} />
             </aside>
             <section>
-                <h1 data-testid="product-detail-name">{title}</h1>
-                <FreeShipping price={ price } freeShipping={ freeShipping } />
-                <button
+            <h1 data-testid="product-detail-name">{title}</h1>
+            <FreeShipping price={price} freeShipping={freeShipping} />
+            <button
                 type="button"
                 data-testid="product-detail-add-to-cart"
-                onClick={ this.handleCLick }
-                value={ JSON.stringify(result) }
-                >
+                onClick={handleCLick}
+                value={JSON.stringify(result)}
+            >
                 Adicionar ao Carrinho
-                </button>
-                <div className="rate">
+            </button>
+            <div className="rate">
                 <p>Avaliação: </p>
                 <span>Nome: </span>
                 <input
-                    data-testid="product-detail-email"
-                    type="text"
-                    name="email"
-                    value={ email }
-                    onChange={ this.onChange }
-                    className="namefield"
+                data-testid="product-detail-email"
+                type="text"
+                name="email"
+                value={email}
+                onChange={onChange}
+                className="namefield"
                 />
                 <span>Comentário:</span>
                 <textarea
-                    data-testid="product-detail-evaluation"
-                    type="text"
-                    name="evaluation"
-                    value={ evaluation }
-                    onChange={ this.onChange }
-                    className="txtareafield"
+                data-testid="product-detail-evaluation"
+                type="text"
+                name="evaluation"
+                value={evaluation}
+                onChange={onChange}
+                className="txtareafield"
                 />
                 <span>Nota: </span>
-                <Rating onChangeFuncProp={ this.onChange } />
+                <Rating onChangeFuncProp={onChange} />
                 <button
-                    data-testid="submit-review-btn"
-                    onClick={ this.handleAvaliation }
-                    type="button"
+                data-testid="submit-review-btn"
+                onClick={handleAvaliation}
+                type="button"
                 >
-                    Submit
+                Submit
                 </button>
-                </div>
+            </div>
             </section>
             <section className="avaliations">
-                <h3>Avaliações</h3>
-                {
-                arraylenght
-            && (
+            <h3>Avaliações</h3>
+            {arraylenght && (
                 productResume.map((elemento) => (
-                <section key={ elemento.email } className="avaliations">
+                <section key={elemento.email} className="avaliations">
                     Email:
-                    <span key={ elemento.email }>{ elemento.email }</span>
+                    <span key={elemento.email}>{elemento.email}</span>
                     Avaliação:
-                    <span>{ elemento.evaluation }</span>
+                    <span>{elemento.evaluation}</span>
                     Nota:
-                    <span>{ elemento.rating }</span>
+                    <span>{elemento.rating}</span>
                     <hr />
                 </section>
-                )))
-                }
+                ))
+            )}
             </section>
-            </main>
+        </main>
         </>
-        );
-    }
+    );
 }
 
-ProductPage.propTypes = {
-  match: PropTypes.shape({
-    params: PropTypes.shape({
-      id: PropTypes.string.isRequired,
-    }).isRequired,
-  }).isRequired,
-};
+ProductPage.propTypes = {};
 
 export default ProductPage;
