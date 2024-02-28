@@ -19,23 +19,35 @@ class ProductPage extends Component {
     }
 
     async componentDidMount() {
-        const { match: { params: { id: productId } } } = this.props;
-        const result = await getProductsFromId(productId);
-        const { thumbnail, price, title, shipping } = result;
-        const { free_shipping: freeShipping } = shipping;
-        this.setState({ thumbnail, price, title, result, freeShipping });
-        if (!localStorage.getItem(productId)) {
-        localStorage.setItem(productId, '[]');
-        this.setState({
-            arraylenght: false,
-        });
+        const { match } = this.props;
+    
+        if (match && match.params && match.params.id) {
+            const { params: { id: productId } } = match;
+    
+            // Chame a função getProductsFromId somente após obter o productId
+            const result = await getProductsFromId(productId);
+    
+            if (!localStorage.getItem(productId)) {
+                localStorage.setItem(productId, '[]');
+                this.setState({
+                    arraylenght: false,
+                });
+            }
+    
+            const { thumbnail, price, title, shipping } = result;
+            const { free_shipping: freeShipping } = shipping;
+            this.setState({ thumbnail, price, title, result, freeShipping });
+    
+            const aval = localStorage.getItem(productId);
+            const aval1 = JSON.parse(aval);
+            this.setState({
+                productResume: aval1,
+            });
+    
+            this.handleCart();
+        } else {
+            console.error('ID do produto não encontrado nos parâmetros da URL.');
         }
-        const aval = localStorage.getItem(productId);
-        const aval1 = JSON.parse(aval);
-        this.setState({
-        productResume: aval1,
-        });
-        this.handleCart();
     }
 
     handleCLick = ({ target }) => {
