@@ -8,11 +8,11 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route exact path='/' Component={<Main />} />
+        <Route exact path='/' element={<Main />} />
         <Route
           exact
           path="/product/:id"
-          Component={(props) => <ProductPage {...props} />}
+          element={(props) => <ProductPage {...props} />}
         />
       </Routes>
     </BrowserRouter>
