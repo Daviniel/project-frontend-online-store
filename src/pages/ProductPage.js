@@ -24,55 +24,56 @@ function ProductPage() {
 
     useEffect(() => {
         const fetchData = async () => {
-        try {
-            const result = await getProductsFromId(id);
-            const { thumbnail, price, title, shipping } = result;
-            const { free_shipping: freeShipping } = shipping;
+            try {
+                const result = await getProductsFromId(id);
+                const { thumbnail, price, title, shipping } = result;
+                const { free_shipping: freeShipping } = shipping;
 
-            setState((prevState) => ({
-            ...prevState,
-            thumbnail,
-            price,
-            title,
-            result,
-            freeShipping,
-            }));
+                setState((prevState) => ({
+                    ...prevState,
+                    thumbnail,
+                    price,
+                    title,
+                    result,
+                    freeShipping,
+                }));
 
-            if (!localStorage.getItem(id)) {
-            localStorage.setItem(id, '[]');
-            setState((prevState) => ({
-                ...prevState,
-                arraylenght: false,
-            }));
+                if (!localStorage.getItem(id)) {
+                    localStorage.setItem(id, '[]');
+                    setState((prevState) => ({
+                        ...prevState,
+                        arraylenght: false,
+                    }));
+                }
+
+                const aval = localStorage.getItem(id);
+                const aval1 = JSON.parse(aval);
+
+                setState((prevState) => ({
+                    ...prevState,
+                    productResume: aval1,
+                }));
+
+                handleCart();
+            } catch (error) {
+                console.error('Erro ao buscar dados do produto:', error);
             }
-
-            const aval = localStorage.getItem(id);
-            const aval1 = JSON.parse(aval);
-            setState((prevState) => ({
-            ...prevState,
-            productResume: aval1,
-            }));
-
-            handleCart();
-        } catch (error) {
-            console.error('Erro ao buscar dados do produto:', error);
-        }
         };
 
         fetchData();
     }, [id]);
 
-    const handleCLick = ({ target }) => {
-        let { value } = target;
+    const handleCLick = (event) => {
+        let { value } = event.currentTarget;
         let cart = localStorage.getItem('cartProducts');
         cart = JSON.parse(cart);
         value = JSON.parse(value);
 
         if (!cart) {
-        localStorage.setItem('cartProducts', JSON.stringify([value]));
+            localStorage.setItem('cartProducts', JSON.stringify([value]));
         } else {
-        cart.push(value);
-        localStorage.setItem('cartProducts', JSON.stringify(cart));
+            cart.push(value);
+            localStorage.setItem('cartProducts', JSON.stringify(cart));
         }
 
         handleCart();
@@ -86,17 +87,17 @@ function ProductPage() {
         const aval1 = JSON.parse(aval);
 
         setState((prevState) => ({
-        ...prevState,
-        productResume: aval1,
-        email: '',
-        evaluation: '',
-        rating: '',
-        arraylenght: true,
+            ...prevState,
+            productResume: aval1,
+            email: '',
+            evaluation: '',
+            rating: '',
+            arraylenght: true,
         }));
 
         setState((prevState) => ({
-        ...prevState,
-        productResume: [...prevState.productResume, productEvaluation],
+            ...prevState,
+            productResume: [...prevState.productResume, productEvaluation],
         }));
 
         const { productResume } = state;
@@ -106,8 +107,8 @@ function ProductPage() {
     const onChange = ({ target }) => {
         const { value, name } = target;
         setState((prevState) => ({
-        ...prevState,
-        [name]: value,
+            ...prevState,
+            [name]: value,
         }));
     };
 
@@ -115,8 +116,8 @@ function ProductPage() {
         const cartItems = localStorage.getItem('cartProducts');
         const cartCount = JSON.parse(cartItems).length;
         setState((prevState) => ({
-        ...prevState,
-        cartCount,
+            ...prevState,
+            cartCount,
         }));
         localStorage.setItem('quant', cartCount);
     };
@@ -136,70 +137,70 @@ function ProductPage() {
 
     return (
         <>
-        <Header cartCount={cartCount} />
-        <main className="productPageMain">
-            <aside>
-            <img src={thumbnail} alt={title} />
-            </aside>
-            <section>
-            <h1 data-testid="product-detail-name">{title}</h1>
-            <FreeShipping price={price} freeShipping={freeShipping} />
-            <button
-                type="button"
-                data-testid="product-detail-add-to-cart"
-                onClick={handleCLick}
-                value={JSON.stringify(result)}
-            >
-                Adicionar ao Carrinho
-            </button>
-            <div className="rate">
-                <p>Avaliação: </p>
-                <span>Nome: </span>
-                <input
-                data-testid="product-detail-email"
-                type="text"
-                name="email"
-                value={email}
-                onChange={onChange}
-                className="namefield"
-                />
-                <span>Comentário:</span>
-                <textarea
-                data-testid="product-detail-evaluation"
-                type="text"
-                name="evaluation"
-                value={evaluation}
-                onChange={onChange}
-                className="txtareafield"
-                />
-                <span>Nota: </span>
-                <Rating onChangeFuncProp={onChange} />
-                <button
-                data-testid="submit-review-btn"
-                onClick={handleAvaliation}
-                type="button"
-                >
-                Submit
-                </button>
-            </div>
-            </section>
-            <section className="avaliations">
-            <h3>Avaliações</h3>
-            {arraylenght && (
-                productResume.map((elemento) => (
-                <section key={elemento.email} className="avaliations">
-                    Email:
-                    <span key={elemento.email}>{elemento.email}</span>
-                    Avaliação:
-                    <span>{elemento.evaluation}</span>
-                    Nota:
-                    <span>{elemento.rating}</span>
-                    <hr />
+            <Header cartCount={cartCount} />
+            <main className="productPageMain">
+                <aside>
+                    <img src={thumbnail} alt={title} />
+                </aside>
+                <section>
+                    <h1 data-testid="product-detail-name">{title}</h1>
+                    <FreeShipping price={price} freeShipping={freeShipping} />
+                    <button
+                        type="button"
+                        data-testid="product-detail-add-to-cart"
+                        onClick={handleCLick}
+                        value={JSON.stringify(result)}
+                    >
+                        Adicionar ao Carrinho
+                    </button>
+                    <div className="rate">
+                        <p>Avaliação: </p>
+                        <span>Nome: </span>
+                        <input
+                            data-testid="product-detail-email"
+                            type="text"
+                            name="email"
+                            value={email}
+                            onChange={onChange}
+                            className="namefield"
+                        />
+                        <span>Comentário:</span>
+                        <textarea
+                            data-testid="product-detail-evaluation"
+                            type="text"
+                            name="evaluation"
+                            value={evaluation}
+                            onChange={onChange}
+                            className="txtareafield"
+                        />
+                        <span>Nota: </span>
+                        <Rating onChangeFuncProp={onChange} />
+                        <button
+                            data-testid="submit-review-btn"
+                            onClick={handleAvaliation}
+                            type="button"
+                        >
+                            Submit
+                        </button>
+                    </div>
                 </section>
-                ))
-            )}
-            </section>
-        </main>
+                <section className="avaliations">
+                    <h3>Avaliações</h3>
+                    {arraylenght && (
+                        productResume.map((elemento) => (
+                            <section key={elemento.email} className="avaliations">
+                                Email:
+                                <span key={elemento.email}>{elemento.email}</span>
+                                Avaliação:
+                                <span>{elemento.evaluation}</span>
+                                Nota:
+                                <span>{elemento.rating}</span>
+                                <hr />
+                            </section>
+                        ))
+                    )}
+                </section>
+            </main>
         </>
     );
 }

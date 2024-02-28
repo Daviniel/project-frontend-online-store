@@ -1,72 +1,48 @@
-import PropTypes from 'prop-types';
-import React, { Component } from 'react';
+import React, { useCallback } from 'react';
 import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import FreeShipping from './FreeShipping';
 
-class CardProduct extends Component {
-  constructor() {
-    super();
-    this.state = {
-
-    };
-  }
-
-  handleCLick = ({ target }) => {
-    const { handleCart } = this.props;
-    let { value } = target;
+const CardProduct = ({ list, handleCart }) => {
+  const handleClick = useCallback(() => {
     let cart = localStorage.getItem('cartProducts');
     cart = JSON.parse(cart);
-    value = JSON.parse(value);
+    const value = list;
+
     if (!cart) {
       localStorage.setItem('cartProducts', JSON.stringify([value]));
     } else {
       cart.push(value);
       localStorage.setItem('cartProducts', JSON.stringify(cart));
     }
-    handleCart();
-  }
 
-  render() {
-    const { list } = this.props;
-    const { shipping: { free_shipping: freeShipping } } = list;
-    return (
-      <div className="singleCardProduct">
-        <Link
-          to={ `/product/${list.id}` }
-          data-testid="product-detail-link"
-          className="cardProduct"
-        >
-          <li data-testid="product">
-            <img src={ list.thumbnail } alt={ list.title } />
-            <div className="productCardInfo">
-              <span>{ list.title }</span>
-              {/* <p>
-                R$
-                { String(list.price.toFixed(2)).replace('.', ',') }
-              </p> */}
-              <FreeShipping freeShipping={ freeShipping } price={ list.price } />
-            </div>
-          </li>
-        </Link>
-        <button
-          type="button"
-          data-testid="product-add-to-cart"
-          onClick={ this.handleCLick }
-          value={ JSON.stringify(list) }
-          className="addCartBtn"
-        >
-          Adicionar ao Carrinho
-        </button>
-        {/* {freeShipping
-          && (
-            <span data-testid="free-shipping">
-              Frete Grátis!!
-            </span>
-          )} */}
-      </div>
-    );
-  }
-}
+    handleCart();
+  }, [handleCart, list]);
+
+  const { title, thumbnail, price, shipping: { free_shipping: freeShipping } } = list;
+
+  return (
+    <div className="singleCardProduct">
+      <Link to={`/product/${list.id}`} data-testid="product-detail-link" className="cardProduct">
+        <li data-testid="product">
+          <img src={thumbnail} alt={title} />
+          <div className="productCardInfo">
+            <span>{title}</span>
+            <FreeShipping freeShipping={freeShipping} price={price} />
+          </div>
+        </li>
+      </Link>
+      <button
+        type="button"
+        data-testid="product-add-to-cart"
+        onClick={handleClick}
+        className="addCartBtn"
+      >
+        Adicionar ao Carrinho
+      </button>
+    </div>
+  );
+};
 
 CardProduct.propTypes = {
   handleCart: PropTypes.func.isRequired,

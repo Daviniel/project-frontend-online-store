@@ -9,11 +9,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route exact path='/' element={<Main />} />
-        <Route
-          exact
-          path="/product/:id"
-          Component={(props) => <ProductPage {...props} />}
-        />
+        <Route path="/product/:id" element={<ProductPage />} />
       </Routes>
     </BrowserRouter>
   );
