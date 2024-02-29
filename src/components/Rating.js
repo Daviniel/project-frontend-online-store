@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 
-const Rating = ({ onChangeFuncProp }) => {
+function Rating ({ onChangeFuncProp }) {
   const onHover = ({ target }) => {
     const stars = document.querySelectorAll('section label img');
     const starCount = Number(target.alt[5]);

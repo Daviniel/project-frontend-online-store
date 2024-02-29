@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import PropTypes from 'prop-types';
 import { Link } from "react-router-dom";
 
-const CarBtn = ({ cartCount }) => {
+function CarBtn ({ cartCount })  {
     const [localCartCount, setLocalCartCount] = useState(0);
 
     useEffect(() => {

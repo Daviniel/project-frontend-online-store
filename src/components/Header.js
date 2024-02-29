@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import CartBtn from './CartBtn';
 
-const Header = ({ cartCount }) => {
+function Header ({ cartCount }) {
   return (
     <header className="header">
       <div className="logoTitle">
