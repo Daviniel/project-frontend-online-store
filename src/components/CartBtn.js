@@ -1,53 +1,36 @@
-import React, { Component } from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from 'prop-types';
 import { Link } from "react-router-dom";
 
-class CarBtn extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            cartCount: 0,
-        };
-    }
+const CarBtn = ({ cartCount }) => {
+    const [localCartCount, setLocalCartCount] = useState(0);
 
-    componentDidMount() {
-        this.handleCart();
-    }
+    useEffect(() => {
+        handleCart();
+    }, [cartCount]);
 
-    componentDidUpdate(prevProps) {
-        const { cartCount } = this.props;
-        if (cartCount !== prevProps.cartCount) {
-            this.handleCart();
-        }
-    }
-
-    handleCart = () => {
-        const { cartCount } = this.props;
+    const handleCart = () => {
         if (!cartCount) {
-            const cartItems = localStorage.getItem('quant');
-            this.setState({ cartCount: cartItems || 0 });
+            const storedCartCount = localStorage.getItem('quant') || 0;
+            setLocalCartCount(Number(storedCartCount));
         } else {
-            this.setState({ cartCount });
+            setLocalCartCount(Number(cartCount));
         }
     };
 
-    render() {
-        const { cartCount } = this.state;
-
-        return (
-            <Link data-testid='shopping-cart-button' to='/shoppingcart' className="cartLink">
-                <div>
-                    <img src="https://cdn-icons-png.flaticon.com/512/34/34627.png" alt="Cart icon." />
-                    {Number(cartCount) !== 0 && (
-                        <div>
-                            <span data-testid="shopping-cart-size">{cartCount}</span>
-                        </div>
-                    )}
-                </div>
-            </Link>
-        );
-    }
-}
+    return (
+        <Link data-testid='shopping-cart-button' to='/shoppingcart' className="cartLink">
+            <div>
+                <img src="https://cdn-icons-png.flaticon.com/512/34/34627.png" alt="Cart icon." />
+                {localCartCount !== 0 && (
+                    <div>
+                        <span data-testid="shopping-cart-size">{localCartCount}</span>
+                    </div>
+                )}
+            </div>
+        </Link>
+    );
+};
 
 CarBtn.propTypes = {
     cartCount: PropTypes.string,
