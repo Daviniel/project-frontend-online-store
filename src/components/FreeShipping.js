@@ -1,32 +1,39 @@
+import React, { useState, useEffect } from "react";
 import PropTypes from 'prop-types';
-import React, { Component } from 'react';
+import { Link } from "react-router-dom";
 
-class FreeShipping extends Component {
-  render() {
-    const { price, freeShipping } = this.props;
-    return (
-      <div className="priceAndShipping">
-        <p>
-          R$
-          {String(Number(price).toFixed(2)).replace('.', ',')}
-        </p>
-        {freeShipping
-            && (
-              <div>
-                <img src="https://static.thenounproject.com/png/1767562-200.png" alt="Free shipping icon." />
-                <span data-testid="free-shipping">
-                  Frete grátis
-                </span>
-              </div>
-            )}
+const CarBtn = ({ cartCount }) => {
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    handleCart();
+  }, [cartCount]);
+
+  const handleCart = () => {
+    if (!cartCount) {
+      const cartItems = localStorage.getItem('quant');
+      setCount(cartItems || 0);
+    } else {
+      setCount(cartCount);
+    }
+  };
+
+  return (
+    <Link data-testid='shopping-cart-button' to='/shoppingcart' className="cartLink">
+      <div>
+        <img src="https://cdn-icons-png.flaticon.com/512/34/34627.png" alt="Cart icon." />
+        {Number(count) !== 0 && (
+          <div>
+            <span data-testid="shopping-cart-size">{count}</span>
+          </div>
+        )}
       </div>
-    );
-  }
-}
-
-FreeShipping.propTypes = {
-  price: PropTypes.number.isRequired,
-  freeShipping: PropTypes.bool.isRequired,
+    </Link>
+  );
 };
 
-export default FreeShipping;
+CarBtn.propTypes = {
+  cartCount: PropTypes.string,
+};
+
+export default CarBtn;
