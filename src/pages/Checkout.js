@@ -73,6 +73,11 @@ function Checkout() {
   return (
     <>
       <Header />
+      <main className="checkout-main">
+        <section>
+          <h3>Revise seus produtos:</h3>
+        </section>
+      </main>
     </>
   );
 }
