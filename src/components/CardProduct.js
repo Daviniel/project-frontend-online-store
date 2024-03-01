@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import FreeShipping from './FreeShipping';
 
-const CardProduct = ({ list, handleCart }) => {
+function CardProduct ({ list, handleCart }) {
   const handleClick = useCallback(() => {
     let cart = localStorage.getItem('cartProducts');
     cart = JSON.parse(cart);
