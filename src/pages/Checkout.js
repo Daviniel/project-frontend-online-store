@@ -84,6 +84,9 @@ function Checkout() {
               <p>{`R$ ${Number(countItems(id) * price).toFixed(2).replace('.', ',')}`}</p>
             </div>
           ))}
+          <div className="totalCheckout">
+            <p>{`Total: R$ ${fullPrice.toFixed(2).replace('.', ',')}`}</p>
+          </div>
         </section>
       </main>
     </>
