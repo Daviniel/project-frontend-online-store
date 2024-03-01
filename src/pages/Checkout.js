@@ -88,6 +88,13 @@ function Checkout() {
             <p>{`Total: R$ ${fullPrice.toFixed(2).replace('.', ',')}`}</p>
           </div>
         </section>
+        <form className="checkoutForm">
+          <h3>Informações do comprador</h3>
+          {/* Adicione labels e inputs para as informações do comprador */}
+          <button type="button" onClick={handleBuy}>
+            Comprar
+          </button>
+        </form>
       </main>
     </>
   );
