@@ -3,10 +3,11 @@ import { Redirect } from 'react-router-dom';
 import CartItem from '../components/CartItem';
 import Header from '../components/Header';
 
-function ShoppingCart () {
+function ShoppingCart() {
   const [products, setProducts] = useState([]);
   const [filterProducts, setFilterProducts] = useState([]);
   const [cartCount, setCartCount] = useState(0);
+  const [redirectToCheckout, setRedirectToCheckout] = useState(false);
 
   useEffect(() => {
     createListItem();
@@ -69,9 +70,13 @@ function ShoppingCart () {
     localStorage.setItem('quant', count);
   };
 
-  const redirectToCheckout = () => {
-    setCheckout(true);
+  const handleRedirectToCheckout = () => {
+    setRedirectToCheckout(true);
   };
+
+  if (redirectToCheckout) {
+    return <Redirect to="/checkout" />;
+  }
 
   return (
     <div>
@@ -101,7 +106,7 @@ function ShoppingCart () {
             <button
               data-testid="checkout-products"
               type="button"
-              onClick={redirectToCheckout}
+              onClick={handleRedirectToCheckout}
               className="final-button"
             >
               Finalizar compra
@@ -111,6 +116,6 @@ function ShoppingCart () {
       </main>
     </div>
   );
-};
+}
 
 export default ShoppingCart;
