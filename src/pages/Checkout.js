@@ -76,6 +76,14 @@ function Checkout() {
       <main className="checkout-main">
         <section>
           <h3>Revise seus produtos:</h3>
+          {listCheckout.map(({ id, thumbnail, title, price }) => (
+            <div key={id} className="checkout-product">
+              <img src={thumbnail} alt={title} />
+              <p>{title}</p>
+              <p>{`${countItems(id)} uni.`}</p>
+              <p>{`R$ ${Number(countItems(id) * price).toFixed(2).replace('.', ',')}`}</p>
+            </div>
+          ))}
         </section>
       </main>
     </>
