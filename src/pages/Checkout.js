@@ -150,7 +150,7 @@ function Checkout() {
               onChange={ handleChange }
             />
           </label>
-
+          
 
           <button type="button" onClick={handleBuy}>
             Comprar
