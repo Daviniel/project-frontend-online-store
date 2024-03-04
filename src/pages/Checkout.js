@@ -90,7 +90,68 @@ function Checkout() {
         </section>
         <form className="checkoutForm">
           <h3>Informações do comprador</h3>
-          {/* Adicione labels e inputs para as informações do comprador */}
+          <label htmlFor="userFullName">
+            <h5>Nome completo</h5>
+            <input
+              data-testid="checkout-fullname"
+              id="userFullName"
+              name="fullName"
+              value={ fullName }
+              onChange={ handleChange }
+            />
+          </label>
+          <label htmlFor="userEmail">
+            <h5>Email</h5>
+            <input
+              data-testid="checkout-email"
+              id="userEmail"
+              name="email"
+              value={ email }
+              onChange={ handleChange }
+            />
+          </label>
+          <label htmlFor="userCpf">
+            <h5>CPF</h5>
+            <input
+              data-testid="checkout-cpf"
+              id="userCpf"
+              name="cpf"
+              value={ cpf }
+              onChange={ handleChange }
+            />
+          </label>
+          <label htmlFor="userPhone">
+            <h5>Telefone</h5>
+            <input
+              data-testid="checkout-phone"
+              id="userPhone"
+              name="phone"
+              value={ phone }
+              onChange={  handleChange }
+            />
+          </label>
+          <label htmlFor="userCep">
+            <h5>CEP</h5>
+            <input
+              data-testid="checkout-cep"
+              id="userCep"
+              name="cep"
+              value={ cep }
+              onChange={ handleChange }
+            />
+          </label>
+          <label htmlFor="userFullAddress">
+            <h5>Endereço</h5>
+            <input
+              data-testid="checkout-address"
+              id="userFullAddress"
+              name="fullAddress"
+              value={ fullAddress }
+              onChange={ handleChange }
+            />
+          </label>
+
+
           <button type="button" onClick={handleBuy}>
             Comprar
           </button>
