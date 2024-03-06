@@ -205,6 +205,12 @@ function ProductPage() {
     );
 }
 
-ProductPage.propTypes = {};
+ProductPage.propTypes = {
+    match: PropTypes.shape({
+        params: PropTypes.shape({
+          id: PropTypes.string.isRequired,
+        }).isRequired,
+    }).isRequired,
+};
 
 export default ProductPage;

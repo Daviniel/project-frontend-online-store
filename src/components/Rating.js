@@ -6,13 +6,11 @@ function Rating ({ onChangeFuncProp }) {
     const stars = document.querySelectorAll('section label img');
     const starCount = Number(target.alt[5]);
 
-    // Make all stars gray
     stars.forEach((star) => {
       star.style.filter = 'brightness(0) saturate(100%) invert(90%) sepia(14%) saturate(22%) hue-rotate(313deg) brightness(93%) contrast(83%)';
     });
 
     for (let i = 1; i <= starCount; i += 1) {
-      // Make hover stars yellow
       document.querySelector(`section label:nth-child(${i}) img`).style.filter = 'none';
     }
   };
@@ -34,7 +32,6 @@ function Rating ({ onChangeFuncProp }) {
           onMouseEnter={onHover}
         />
       </label>
-      {/* ... (restante do código) ... */}
       <label htmlFor="5-rating">
         <input
           name="rating"
