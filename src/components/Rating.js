@@ -7,11 +7,17 @@ function Rating ({ onChangeFuncProp }) {
     const starCount = Number(target.alt[5]);
 
     stars.forEach((star) => {
-      star.style.filter = 'brightness(0) saturate(100%) invert(90%) sepia(14%) saturate(22%) hue-rotate(313deg) brightness(93%) contrast(83%)';
+      if (star.style) {
+        star.style.filter = 'brightness(0) saturate(100%) invert(90%) sepia(14%) saturate(22%) hue-rotate(313deg) brightness(93%) contrast(83%)';
+      }
     });
-
+  
     for (let i = 1; i <= starCount; i += 1) {
-      document.querySelector(`section label:nth-child(${i}) img`).style.filter = 'none';
+      // Make hover stars yellow
+      const hoverStar = document.querySelector(`section label:nth-child(${i}) img`);
+      if (hoverStar && hoverStar.style) {
+        hoverStar.style.filter = 'none';
+      }
     }
   };
 
